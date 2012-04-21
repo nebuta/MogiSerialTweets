@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+
+<title>ヘルプ - MogiSerialTweets</title>
+<script type="text/javascript">
+    if (navigator.userAgent.indexOf('iPhone') != -1) {
+        document.write('<link rel="stylesheet" type="text/css" href="./iphone.css">');
+    }else if (navigator.userAgent.indexOf('iPad') != -1) {
+        document.write('<link rel="stylesheet" type="text/css" href="./ipad.css">');
+    }else {
+        document.write('<link rel="stylesheet" type="text/css" href="./pc.css">');
+    }
+</script>	
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-26182536-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+</head>
+<body style='padding:1em;'>
+<h1>MogiSerialTweetsの使い方</h1>
+<h2>概要</h2>
+<p>茂木健一郎（<a href='http://twitter.com/#!/kenichiromogi'>@kenichiromogi</a>）氏がTwitterに毎日投稿している「連続ツイート」を抽出して表示するサイト。最新一週間分を表示します。</p>
+<p>最新の主要ブラウザとiPadでの動作を確認済み。iPhoneは未テスト。</p>
+<h2>ライセンス</h2>
+<p>
+本サイトのコードは<a href='http://en.wikipedia.org/wiki/BSD_licenses'>Free BSDライセンス</a>で配布します。
+</p>
+<h2>技術的説明</h2>
+<div style='margin:1em 2em'>
+<p>JSONPを使ってツイートを取得。TwitterへのJSONPの呼び出し回数に制限があるとのことなので、HTML5の<a href='http://www.google.com/search?hl=ja&q=html5+localStorage'>ローカルストレージ</a>を使ってデータをキャッシングし、呼び出し回数上限に達するのを防ぐようにしている。ローカルにHTML+.js<a href='./mogitweet_all.zip'>ファイル一式</a>を保存すれば、ローカル環境でも動作し、一度ロードしたツイートはオフラインでも表示される。<a href='http://www.google.com/search?q=html5+オフライン+マニフェストファイル'>マニフェストファイル</a>を使ったiPad, iPhoneでのオフライン動作には未対応。</p>
+<p>
+ツイートを抽出するときの前提：連続ツイートは（１）〜（９）までの９つ以下のツイートで構成される。
+</p>
+</div>
+</body>
+</html>
