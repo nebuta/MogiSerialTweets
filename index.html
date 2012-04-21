@@ -8,6 +8,7 @@
 <title>茂木健一郎連続ツイート</title>
 <!-- <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no,maximum-scale=3.0" /> -->
 <meta name="viewport" content="width=device-width, maximum-scale=1.0, minimum-scale=1.0" />
+<link ref='stylesheet' type='text/css' src='stroll-1.0.css'/>
 <script type="text/javascript">
     if (navigator.userAgent.indexOf('iPhone') != -1) {
         document.write('<link rel="stylesheet" type="text/css" href="./iphone.css">');
@@ -19,6 +20,7 @@
 </script>
 
 <script type="text/javascript" src="./jquery-1.6.4.min.js" charset="utf-8"></script>
+<script type="text/javascript" src="./stroll-1.0.js" charset="utf-8"></script>
 <script type="text/javascript" src="./main.js" charset="utf-8"></script>
 <script type="text/javascript">
 
@@ -40,28 +42,21 @@
 <div id="twocolumnbody">
 <div id='main'>
 <div id='navigation'>
-<div id='nav_head'>Shift + ↑/↓ to move a date.</div>
+<div id='nav_head'>j/k to move a date.</div>
 <div id='dates'>取得中…</div>
 <br>
 <p style='display:none'><a href='javascript:loadOlderTweets();'>過去のツイート取得</a>&nbsp;</p>
 <p><a href='javascript:loadNewTweets();'>ツイート更新</a></p>
 <br/><br/>
 <p id='fontsize'><a href='javascript:fontSizeChange(-1);'><img class='minusplus' src='minus.png' width='15px' height='15px'/></a>&nbsp;<a href='javascript:fontSizeChange(1);'><img class='minusplus' src='plus.png' width='15px' height='15px'/></a></p>
-<input type="checkbox" name="" id='check_amb' checked onClick="picOnOff(this.checked);"/>顔写真表示
-<br/><br/>
+<D-r><br/>
 <p><a href='javascript:clearCache();'>リセット</a></p>
 <br/><br/>
-<p><a href='./help.html'>ヘルプ</a></p>
-<p><em style='font-style:italic;'>Tweets by <a href='http://twitter.com/#!/kenichiromogi'>@kenichimomogi</a><br/><br/>
-<span style='font-size:70%;'>Software ver.0.2 <br/>by Nebuta (<a href='http://twitter.com/#!/nebutalab'>@nebutalab</a>)<br/>
-Created on Oct 7, 2011.<br/>
-Modified on Oct 22, 2011.</span>
-</em><br/><br/><br/></p>
+<p><a href='javascript:showInfo();return false;'>Info</a></p>
 
 <p>
 </div>
 <div id='contents'>
-<div id='mogipic' class='pic_visible'><img src='mogiken.jpg'></div>
 <div id='twitter'></div>
 </div>
 </div>

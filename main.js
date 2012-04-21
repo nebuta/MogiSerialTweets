@@ -1,17 +1,22 @@
 debug = true;
-MAX_SEARCH = 200;
-DEFALT_LOADREPEAT = 3;
+MAX_SEARCH = 400;
+DEFALT_LOADREPEAT = 8;
 loadrepeat_count = 0;
 fetch_mode = 'N/A';
 currentIndex = 0;
-numDates = 7;
+numDates = 21;
 
 $(window).keydown(function(e){
-  if(e.keyCode==38 && e.shiftKey){
+/*  if(e.keyCode==38 && e.shiftKey){
   	moveUp();
   }else if(e.keyCode==40  && e.shiftKey){
   	moveDown();
+  }else*/ if(e.keyCode == 75){
+  	moveUp();
+  }else if(e.keyCode==74){
+  	moveDown();
   }
+
 });
 
 function moveUp(){
@@ -47,7 +52,7 @@ function findSerialTweets(json){
 	var count = 0;
 	var indices = new Array(MAX_SEARCH);
 	for(var i=0;i<json.length;i++){
-		var isSerial = json[i].text.match(/^(.{2})（[１２３４５６７８９]）/);
+		var isSerial = json[i].text.match(/^(.{2})（[１２３４５６７８９123456789]）/) || json[i].text.match(/連続ツイート第(.+)回「(.+)」/);
 		if(isSerial){
 			indices[count]=i;
 			count++;
@@ -185,7 +190,7 @@ function makeDateList(num_days){
 
 function jumpToIndex(i){
 	currentIndex = i;
-	var d_list = makeDateList(7);
+	var d_list = makeDateList(21);
 	jumpToDate(d_list[i]);
 }
 
@@ -214,33 +219,54 @@ function jumpToDate(date){
 		if(alltweetkeys[i].slice(0,8)==datestr)
 		tw_selected.push(alltweetkeys[i]);
 	}
-	$('p','#dates').removeClass('selecteddate');
+	$('li','#dates').removeClass('selecteddate');
 	$('#'+datestr).addClass('selecteddate');
 	var text = new Array();
+	var number;
 	var title;
+	var shorttitle; 
 	for(i=0;i<tw_selected.length;i++){
 		var json = JSON.parse(localStorage[tw_selected[i]]);
-		json.text.match(/^(.{0,3})（[１２３４５６７８９]）(.+)$/);
-		title = RegExp.$1;
-		text.push(RegExp.$2);
+		if(json.text.match(/^(.{0,3})（[１２３４５６７８９]）(.+)$/)){
+			text.push(RegExp.$2);
+			shorttitle = RegExp.$1;
+		}
+		if(json.text.match(/連続ツイート第(.+)回「(.+?)」/)){
+			number = RegExp.$1;
+			title = RegExp.$2;
+		}
 	}
-	var tw_content = "<p class='date'>"+formatDate(date)+"&nbsp;"+title+"</p>";
-	for(i in text){
-		tw_content += "<p class='tweet'>"+text[i]+"</p>";
+	var tw_content = "<p class='date'>"+formatDate(date)+"&nbsp;"+shorttitle+"（"+ number +"）<i>"+title +"</i></p>";
+	for(i in text){	
+		tw_content += "<div class='tweet' id='tweet"+i+"'>"+text[i]+"</div>";
 		+"<span id='date'>"+formatDate(getDate(json.created_at))+"</span></p>";
 	}
 
 	$('#twitter').html(tw_content);
+	showTweetsAnimate();
 	window.scrollBy(0,0); 
+}
+
+function showTweetsAnimate(){
+	counter = 0;
+	timer = setInterval(function(){
+		mydebug('timer called.')
+		mydebug('div.tweet#tweet'+counter);
+		$('div.tweet#tweet'+counter).css('opacity','1');
+		counter += 1;
+		if(counter==8)
+			clearInterval(timer);
+	},50);
 }
 
 function showTweets(){
 	var d_list = makeDateList(numDates);
-	var d_content = "";
+	var d_content = "<ul class='fade'>";
 	for(var i=0;i<d_list.length;i++){
 		var datestr = ""+(d_list[i][0]*10000+d_list[i][1]*100+d_list[i][2]);
-		d_content += "<p class='dateentry' id='"+datestr+"'><a href='javascript:jumpToIndex("+i+")'>"+formatDate(d_list[i])+"</a></p>\n";
+		d_content += "<li class='dateentry' id='"+datestr+"'><a href='javascript:jumpToIndex("+i+")'>"+formatDate(d_list[i])+"</a></li>\n";
 	}
+	d_content += '</ul>'
 	$('#dates').html(d_content);
 	jumpToDate(d_list[0]);
 	currentIndex = 0;
@@ -315,3 +341,7 @@ if (navigator.onLine) {
 	}
 	loadTwitter();
 }
+
+$(function(){
+Stroll.bind('#navigation ul')
+});
