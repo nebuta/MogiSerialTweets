@@ -1,8 +1,35 @@
-debug = false;
+debug = true;
 MAX_SEARCH = 200;
 DEFALT_LOADREPEAT = 3;
 loadrepeat_count = 0;
 fetch_mode = 'N/A';
+currentIndex = 0;
+numDates = 7;
+
+$(window).keydown(function(e){
+  if(e.keyCode==38 && e.shiftKey){
+  	moveUp();
+  }else if(e.keyCode==40  && e.shiftKey){
+  	moveDown();
+  }
+});
+
+function moveUp(){
+	currentIndex -= 1;
+	if(currentIndex<0)
+		currentIndex = 0;
+	else
+		jumpToIndex(currentIndex);
+}
+
+function moveDown(){
+	currentIndex += 1;
+	if(currentIndex>=numDates)
+		currentIndex = numDates-1;
+	else
+		jumpToIndex(currentIndex);
+}
+
 
 function keys(object) {
 	var results = [];
@@ -20,7 +47,7 @@ function findSerialTweets(json){
 	var count = 0;
 	var indices = new Array(MAX_SEARCH);
 	for(var i=0;i<json.length;i++){
-		var isSerial = json[i].text.match(/^(.+)（[１２３４５６７８９]）/);
+		var isSerial = json[i].text.match(/^(.{2})（[１２３４５６７８９]）/);
 		if(isSerial){
 			indices[count]=i;
 			count++;
@@ -36,6 +63,13 @@ function fontSizeChange(size){
 	fontSizeIndex += size;
 	fontSizeIndex = Math.max(Math.min(fontSizeIndex,fontSize.length-1),0);
 	$('#contents').css('font-size', fontSize[fontSizeIndex]);
+}
+
+function picOnOff(flag){
+	if(flag)
+		$('#mogipic').addClass('pic_visible');
+	else
+		$('#mogipic').removeClass('pic_visible');
 }
 
 //茂木氏が常に日本に居ると仮定
@@ -148,6 +182,31 @@ function makeDateList(num_days){
 	}
 	return ret;
 }
+
+function jumpToIndex(i){
+	currentIndex = i;
+	var d_list = makeDateList(7);
+	jumpToDate(d_list[i]);
+}
+
+function calcIndex(date){
+	var datestr= ""+(date[0]*10000+date[1]*100+date[2]);
+	var ps = $('p','#dates');
+	var found = -1;
+	var pss = ps.get();
+	for(var i =0;i<ps.length;i++){
+		var id = pss[i].id;
+		mydebug(id, datestr);
+		if(id==datestr){
+			fount = i;
+			break
+		}
+		i += 1;
+	}
+	mydebug('calcIndex: '+date + found);
+	return found;
+}
+
 function jumpToDate(date){
 	var tw_selected = new Array();
 	var datestr= ""+(date[0]*10000+date[1]*100+date[2]);
@@ -172,18 +231,19 @@ function jumpToDate(date){
 	}
 
 	$('#twitter').html(tw_content);
+	window.scrollBy(0,0); 
 }
 
 function showTweets(){
-	var d_list = makeDateList(7);
+	var d_list = makeDateList(numDates);
 	var d_content = "";
 	for(var i=0;i<d_list.length;i++){
 		var datestr = ""+(d_list[i][0]*10000+d_list[i][1]*100+d_list[i][2]);
-		d_content += "<p class='dateentry' id='"+datestr+"'><a href='javascript:jumpToDate(["+d_list[i][0]+","
-		+d_list[i][1]+","+d_list[i][2]+"])'>"+formatDate(d_list[i])+"</a></p>\n";
+		d_content += "<p class='dateentry' id='"+datestr+"'><a href='javascript:jumpToIndex("+i+")'>"+formatDate(d_list[i])+"</a></p>\n";
 	}
 	$('#dates').html(d_content);
 	jumpToDate(d_list[0]);
+	currentIndex = 0;
 	mydebug("IDs from "+saved_min_id+" to "+saved_max_id+" are saved in the cache. "+alltweetkeys.length+" tweets are in cache as serial tweets.");
 }
 

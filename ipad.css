@@ -1,6 +1,6 @@
-//ipad.css
+//pc.css
 * { margin : 0 ; padding : 0 ; }
-body { width : 100% ; background-color: #e8d3e8; font-size: 20px;}
+body { width : 100% ; background-color:#f5deb3;min-width: 780px;}
 #twocolumnbody { position : relative ; }
 #header { width : 100% ; height : 50px ; position:fixed;}
 #footer { width : 100% ; clear : both ; }
@@ -12,18 +12,73 @@ overflow: auto;}
 
 #navigation {
 position: fixed;
-left: 0px;
+overflow: auto;
+left:0px;
 top: 0px;
-width: 160px;
+width: 140px;
 height: 100%;
-margin: 0;
-padding: 1em;}
+margin: 10px;
+padding: 10px;
+}
 
-#contents {width: 90%;
+#contents {
+float:left;
+//width: 90%;
 border: 0px solid white;
-margin: 0em 1em 1em 0em;
-padding: 1em 2em;
-background-color:#d8bfd8;
+margin:  0px 60px 0px 0px;
+padding: 20px;
+background-color:#deb887;
+    z-index:2;
+}
+
+#mogipic{
+	visibility: hidden;
+	position: absolute;
+	right: 479px;
+	top: 20px;
+	width: 499px;
+	height: 336px;
+filter: Alpha(opacity=0);
+    opacity:0;
+    z-index:3;
+	position: absolute;
+	width: 100px;
+	height: 50%;
+-webkit-transition-duration: 1s;
+-webkit-transition-timing-function: linear;
+}
+
+.pic_visible#mogipic{
+	visibility: visible;
+filter: Alpha(opacity=50);
+    opacity:0.5;
+-webkit-transition-duration: 1s;
+-webkit-transition-timing-function: linear;
+}
+
+
+p.tweet{
+    z-index:4;
+}
+
+.selecteddate{
+	background-color:#deb887;
+}
+
+#fontsize{
+	vertical-align:middle;
+}
+
+div#twitter{
+}
+
+p.dateentry{
+width: 150px;
+}
+
+img.minusplus{
+	width: 30px;
+	height: 30px;
 }
 
 @media only screen and (orientation:portrait) {
@@ -44,14 +99,4 @@ background-color:#d8bfd8;
 	.selecteddate{
 		background-color:#bdb76b;
 	}
-}
-
-
-#fontsize{
-	vertical-align:middle;
-}
-
-img.minusplus{
-	width: 30px;
-	height: 30px;
 }
