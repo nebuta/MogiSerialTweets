@@ -1,7 +1,6 @@
 //pc.css
 * { margin : 0 ; padding : 0 ; }
-body { width : 100% ; background-color:#222;
-//min-width: 780px;
+body { width : 100% ; background-color:#222;min-width: 780px;
 color: #eee;
 
 }
@@ -34,7 +33,7 @@ padding: 10px;
 float:left;
 			//width: 90%;
 border: 0px solid white;
-margin:  20px 20px 20px 10px;
+margin:  0px 60px 0px 0px;
 padding: 20px;
 				 background-color:#223;
 				 z-index:2;
@@ -98,13 +97,6 @@ height: 30px;
 div#navigation{
 	li {
 		padding: 5px 15px;
-	//	border: 1px solid  rgba(100,200,200,200);
-		-webkit-transition: opacity 1s linear;
-		&.selecteddate{
-		border: 1px solid  rgba(200,200,200,255);
-		-webkit-transition: opacity 1s linear;
-	}
-
 	}
 	.fade li {
 		-webkit-transition: opacity .35s ease-in-out;
@@ -123,6 +115,10 @@ opacity: 0;
 background: #333;
 	}
 
+	li.selecteddate{
+		border: 1px solid  #eee;
+	}
+
 	ul {
 		height: 400px;
 		overflow-x: hidden;
@@ -130,59 +126,9 @@ background: #333;
 	}
 }
 
-@media screen and (min-width: 1000px) {
+@media screen and (min-width: 500px) {
 	#contents{
 		-webkit-column-count: 2;
-	}
-}
-
-@media screen and (max-width: 1000px) {
-	#contents{
-		-webkit-column-count: 1;
-	}
-}
-
-
-@media screen and (max-width: 700px) {
-	#navigation{
-		display:none;
-	}
-	#twocolumnbody{
-//		width: 100%;
-		margin-left: 0px;
-	#contents {
-		position: static;
-		top: 0px;
-		left: 0px;
-		display: block;
-		margin: 20px 20px;
-		height: 100%;
-		scroll: auto;
-		overflow-y: scroll;
-		#twitter {
-			height: 100%;
-		}
-	}
-}
-
-}
-
-
-
-
-
-.progress {
-	width: 100px;
-	height: 15px;
-	background-color: #444;
-	visibility: hidden;
-border-radius: 2px;
-	> .progress-bar {
-border-radius: 2px;
-		background-color: blue;
-		width:  30%;
-		height: 100%;
-		-webkit-transition: width 0.2s ease-in-out;
 	}
 }
 

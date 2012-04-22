@@ -140,12 +140,15 @@ function callBackJson(json){
 		}
 	}
 	loadrepeat_count += 1;
+	setResetProgress(loadrepeat_count / DEFALT_LOADREPEAT * 100);
 	if(loadrepeat_count<DEFALT_LOADREPEAT){
 		if(fetch_mode=="new")
 			loadNewTweets();
 		else if(fetch_mode=="old")
 			loadOlderTweets();
 	}else{
+		$('#prog-container').css('visibility','hidden');
+		setResetProgress(0);
 		loadrepeat_count = 0;
 		showTweets();
 	}
@@ -247,21 +250,28 @@ function jumpToDate(date){
 	window.scrollBy(0,0); 
 }
 
+var timerId = undefined;
 function showTweetsAnimate(){
 	counter = 0;
-	timer = setInterval(function(){
+	if(timerId)
+		clearInterval(timerId);
+	timerId = setInterval(function(){
 		mydebug('timer called.')
 		mydebug('div.tweet#tweet'+counter);
 		$('div.tweet#tweet'+counter).css('opacity','1');
 		counter += 1;
-		if(counter==8)
-			clearInterval(timer);
-	},50);
+		if(counter>8)
+			clearInterval(timerId);
+	},80);
+	heightone = $('.selecteddate').outerHeight(true);
+	offset = -($('#navigation ul').height() - heightone)/ 2;
+	mydebug('Height of a li element: '+heightone);
+	$('#navigation ul').animate({scrollTop: heightone*currentIndex+offset},100,'swing')
 }
 
 function showTweets(){
 	var d_list = makeDateList(numDates);
-	var d_content = "<ul class='fade'>";
+	var d_content = "<ul id='dates' class='fade'>";
 	for(var i=0;i<d_list.length;i++){
 		var datestr = ""+(d_list[i][0]*10000+d_list[i][1]*100+d_list[i][2]);
 		d_content += "<li class='dateentry' id='"+datestr+"'><a href='javascript:jumpToIndex("+i+")'>"+formatDate(d_list[i])+"</a></li>\n";
@@ -276,6 +286,7 @@ function showTweets(){
 function loadTwitter(){
 	if(saved_min_id==-1){
 		fetch_mode = "old";
+		$('#prog-container').css('visibility','visible');
 		mydebug("Calling $.getJSON()…");
 		$.getJSON("http://twitter.com/statuses/user_timeline/kenichiromogi.json?"+
 			"callback=?&count=200&include_rts=false&exclude_replies=true",callBackJson);
@@ -317,18 +328,6 @@ function clearCache(){
 }
 
 function initialize(){
-/*
-var cache = window.applicationCache;
-cache.addEventListener("updateready", function() {
-    if (confirm('アプリケーションの新しいバージョンが利用可能です。更新しますか？')) {
-        cache.swapCache();
-        location.reload();
-    }
-});
-if (navigator.onLine) {
-    cache.update();
-}*/
-
 	fetch_mode = "N/A";
 	var range = localStorage['savedIdRange'];
 	if(range != null){
@@ -343,5 +342,21 @@ if (navigator.onLine) {
 }
 
 $(function(){
-Stroll.bind('#navigation ul')
+window.applicationCache.update();
+Stroll.bind('#navigation ul');
+var cache = window.applicationCache;
+cache.addEventListener("updateready", function() {
+    if (confirm('New version available. Do you want to update now?')) {
+        cache.swapCache();
+        location.reload();
+    }
 });
+if (navigator.onLine) {
+    cache.update();
+}});
+
+
+function setResetProgress(percent){
+	$('#reset-progress').width(''+percent+'%');
+}
+

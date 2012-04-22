@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<html lang="ja">
-<head>
+<html lang="ja" manifest="cache.manifest"><head>
 <meta charset="UTF-8">
 <!-- MogiSerialTweets ver. 0.2-->
 <!-- Copyright (C) 2011 Nebuta All Rights Reserved. This program is distributed under BSD license.-->
@@ -49,9 +48,13 @@
 <p><a href='javascript:loadNewTweets();'>ツイート更新</a></p>
 <br/><br/>
 <p id='fontsize'><a href='javascript:fontSizeChange(-1);'><img class='minusplus' src='minus.png' width='15px' height='15px'/></a>&nbsp;<a href='javascript:fontSizeChange(1);'><img class='minusplus' src='plus.png' width='15px' height='15px'/></a></p>
-<D-r><br/>
+<br/>
 <p><a href='javascript:clearCache();'>リセット</a></p>
-<br/><br/>
+
+<div id='prog-container' class='progress'>
+				<div id='reset-progress' class='progress-bar'></div>
+</div>
+<br/>
 <p><a href='javascript:showInfo();return false;'>Info</a></p>
 
 <p>
