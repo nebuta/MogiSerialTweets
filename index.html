@@ -7,17 +7,7 @@
 <title>茂木健一郎連続ツイート</title>
 <!-- <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no,maximum-scale=3.0" /> -->
 <meta name="viewport" content="width=device-width, maximum-scale=1.0, minimum-scale=1.0" />
-<link ref='stylesheet' type='text/css' src='stroll-1.0.css'/>
-<script type="text/javascript">
-    if (navigator.userAgent.indexOf('iPhone') != -1) {
-        document.write('<link rel="stylesheet" type="text/css" href="./iphone.css">');
-    }else if (navigator.userAgent.indexOf('iPad') != -1) {
-        document.write('<link rel="stylesheet" type="text/css" href="./ipad.css">');
-    }else {
-        document.write('<link rel="stylesheet" type="text/css" href="./pc.css">');
-    }
-</script>
-
+<link rel="stylesheet" type="text/css" href="./pc.css">
 <script type="text/javascript" src="./jquery-1.6.4.min.js" charset="utf-8"></script>
 <script type="text/javascript" src="./main.js" charset="utf-8"></script>
 <script type="text/javascript">
@@ -40,21 +30,23 @@
 <div id="twocolumnbody">
 <div id='main'>
 <div id='navigation'>
-<div id='nav_head'>j/k to move a date.</div>
+<div id='nav_head'>j/kキーで日付移動</div>
 <div id='dates'>取得中…</div>
 <br>
 <p style='display:none'><a href='javascript:loadOlderTweets();'>過去のツイート取得</a>&nbsp;</p>
-<p><a href='javascript:loadNewTweets();'>ツイート更新</a></p>
-<br/><br/>
+<p style='display:none'><a href='javascript:loadNewTweets();'>ツイート更新</a></p>
 <p id='fontsize'><a href='javascript:fontSizeChange(-1);'><img class='minusplus' src='minus.png' width='15px' height='15px'/></a>&nbsp;<a href='javascript:fontSizeChange(1);'><img class='minusplus' src='plus.png' width='15px' height='15px'/></a></p>
 <br/>
-<p><a href='javascript:clearCache();'>リセット</a></p>
+<p><a href='javascript:clearCache();'>リセット</a><br/><span style='font-size:12px;'>（全ツイート再読込）</span></p>
 
 <div id='prog-container' class='progress'>
 				<div id='reset-progress' class='progress-bar'></div>
 </div>
-<br/>
-<p><a href='javascript:showInfo();return false;'>Info</a></p>
+
+<div class='infobox'>
+	<p><span id='title'>茂木健一郎<br/>連続ツイート</span> <a href='http://twitter.com/#!/kenichiromogi'>@kenichiromogi</a></p>
+	<p class='info'>Software <br/>by Nebuta Lab<br/> <a href='http://twitter.com/#!/nebutalab'>@nebutalab</a>&nbsp;/&nbsp;<a href='https://github.com/nebuta/MogiSerialTweets'>GitHub</a></p>
+</div>
 
 <p>
 </div>

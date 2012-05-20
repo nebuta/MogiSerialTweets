@@ -1,6 +1,6 @@
 CACHE MANIFEST
 # Date: 4/21/2012
-# Revision: 305
+# Revision: 307
  
 CACHE:
 ipad.css
@@ -9,10 +9,10 @@ pc.css
 
 jquery-1.6.4.min.js
 main.js
-stroll-1.0.js
 
 plus.png
 minus.png
 
 index.html
+
 

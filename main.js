@@ -1,10 +1,10 @@
-debug = true;
+debug = false;
 MAX_SEARCH = 400;
 DEFALT_LOADREPEAT = 8;
 loadrepeat_count = 0;
 fetch_mode = 'N/A';
 currentIndex = 0;
-numDates = 21;
+numDates = 30;
 
 $(window).keydown(function(e){
 /*  if(e.keyCode==38 && e.shiftKey){
@@ -152,6 +152,7 @@ function callBackJson(json){
 		loadrepeat_count = 0;
 		showTweets();
 	}
+	localStorage['lastUpdated'] = new Date().toString();
 }
 
 function updateTweetListData(){
@@ -177,7 +178,7 @@ function makeDateList(num_days){
 			list[count][1] = Math.floor(date/100) % 100;
 			list[count][2] = date % 100;
 			count++;
-			if(num_days==count) break;
+			if(num_days==count) braak;
 		}
 		prev_date = date;
 	}
@@ -193,7 +194,7 @@ function makeDateList(num_days){
 
 function jumpToIndex(i){
 	currentIndex = i;
-	var d_list = makeDateList(21);
+	var d_list = makeDateList(numDates);
 	jumpToDate(d_list[i]);
 }
 
@@ -241,13 +242,19 @@ function jumpToDate(date){
 	}
 	var tw_content = "<p class='date'>"+formatDate(date)+"&nbsp;"+shorttitle+"（"+ number +"）<i>"+title +"</i></p>";
 	for(i in text){	
-		tw_content += "<div class='tweet' id='tweet"+i+"'>"+text[i]+"</div>";
+		tw_content += "<div class='tweet' id='tweet"+i+"'>"+addLink(text[i])+"</div>";
 		+"<span id='date'>"+formatDate(getDate(json.created_at))+"</span></p>";
 	}
 
 	$('#twitter').html(tw_content);
 	showTweetsAnimate();
 	window.scrollBy(0,0); 
+}
+
+function addLink(text){
+	ret = text;
+	ret = ret.replace(/(http:\/\/\S+?)([\）) 　])/,"<a href='$1'>$1</a>$2");
+	return ret;
 }
 
 var timerId = undefined;
@@ -262,7 +269,7 @@ function showTweetsAnimate(){
 		counter += 1;
 		if(counter>8)
 			clearInterval(timerId);
-	},80);
+	},25);
 	heightone = $('.selecteddate').outerHeight(true);
 	offset = -($('#navigation ul').height() - heightone)/ 2;
 	mydebug('Height of a li element: '+heightone);
@@ -287,9 +294,12 @@ function loadTwitter(){
 	if(saved_min_id==-1){
 		fetch_mode = "old";
 		$('#prog-container').css('visibility','visible');
-		mydebug("Calling $.getJSON()…");
-		$.getJSON("http://twitter.com/statuses/user_timeline/kenichiromogi.json?"+
-			"callback=?&count=200&include_rts=false&exclude_replies=true",callBackJson);
+		mydebug("Calling $.ajax()…");
+		$.ajax({url:"http://twitter.com/statuses/user_timeline/kenichiromogi.json?"+
+							"count=200&include_rts=false&exclude_replies=true",
+						dataType: "jsonp",
+						jsonpCallback: "callBackJson"
+			});
 	}else{
 		showTweets();
 	}
@@ -298,23 +308,26 @@ function loadTwitter(){
 function loadOlderTweets(){
 	fetch_mode = "old";
 	if(saved_min_id!=-1){
-		mydebug("Calling $.getJSON()…");
-		$.getJSON("http://twitter.com/statuses/user_timeline/kenichiromogi.json?"+
-		"callback=?&count=200&include_rts=false&exclude_replies=true&max_id="+saved_min_id,callBackJson);
+		mydebug("Calling $.ajax()…");
+		$.ajax({url:"http://twitter.com/statuses/user_timeline/kenichiromogi.json?"+
+								"count=200&include_rts=false&exclude_replies=true&max_id="+saved_min_id,
+						dataType:"jsonp",jsonpCallback: "callBackJson"});
 	}
 }
 
 function loadNewTweets(){
 	if(saved_min_id!=-1){
 		fetch_mode = "new";
-		mydebug("Calling $.getJSON()…");
-		$.getJSON("http://twitter.com/statuses/user_timeline/kenichiromogi.json?"+
-		"callback=?&count=200&include_rts=false&exclude_replies=true&since_id="+saved_max_id,callBackJson);
+		mydebug("Calling $.ajax()…");
+		$.ajax({url:"http://twitter.com/statuses/user_timeline/kenichiromogi.json?"+
+						"count=200&include_rts=false&exclude_replies=true&since_id="+saved_max_id,
+						dataType:"jsonp",jsonpCallback: "callBackJson"});
 	}else{
 		fetch_mode = "old";
-		mydebug("Calling $.getJSON()…");
-		$.getJSON("http://twitter.com/statuses/user_timeline/kenichiromogi.json?"+
-		"callback=?&count=200&include_rts=false&exclude_replies=true",callBackJson);
+		mydebug("Calling $.ajax()…");
+		$.ajax({url:"http://twitter.com/statuses/user_timeline/kenichiromogi.json?"+
+						"callback=?&count=200&include_rts=false&exclude_replies=true",
+						dataType:"jsonp",jsonpCallback: "callBackJson"});
 	}
 }
 
@@ -329,6 +342,12 @@ function clearCache(){
 
 function initialize(){
 	fetch_mode = "N/A";
+	var lastUpdated = localStorage['lastUpdated'];
+	
+	//More than 22 hrs since the last update
+	if(lastUpdated != null && (new Date() - new Date(lastUpdated) >= 1000*60*60*22)){
+		loadNewTweets();
+	}
 	var range = localStorage['savedIdRange'];
 	if(range != null){
 		ids = range.split(",");
@@ -343,7 +362,6 @@ function initialize(){
 
 $(function(){
 window.applicationCache.update();
-Stroll.bind('#navigation ul');
 var cache = window.applicationCache;
 cache.addEventListener("updateready", function() {
     if (confirm('New version available. Do you want to update now?')) {
@@ -359,4 +377,5 @@ if (navigator.onLine) {
 function setResetProgress(percent){
 	$('#reset-progress').width(''+percent+'%');
 }
+
 
